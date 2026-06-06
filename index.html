@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hợp Đồng Thuê Căn Hộ – Vinhomes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.min.js"></script>
+<style>
+:root {
+  --bg: #f5f3ef;
+  --surface: #ffffff;
+  --surface2: #f9f8f6;
+  --border: #e5e1d8;
+  --text: #1a1816;
+  --text2: #6b6560;
+  --text3: #9e9890;
+  --accent: #c8a96e;
+  --accent-dark: #a8893e;
+  --danger: #c0392b;
+  --success: #27704a;
+  --info: #2563a8;
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh}
+h1{font-family:'Playfair Display',serif;font-weight:500}
+
+/* LOGIN */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1rem}
+.login-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2.5rem 2rem;width:100%;max-width:380px;box-shadow:var(--shadow)}
+.login-logo{text-align:center;margin-bottom:2rem}
+.login-logo h1{font-size:22px;color:var(--text)}
+.login-logo p{font-size:12px;color:var(--text3);margin-top:4px;letter-spacing:.05em;text-transform:uppercase}
+.login-box label{display:block;font-size:12px;color:var(--text2);margin-bottom:4px;font-weight:500}
+.login-box input{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;font-family:inherit;background:var(--surface2);outline:none;transition:.15s}
+.login-box input:focus{border-color:var(--accent);background:#fff}
+.login-box .field{margin-bottom:1rem}
+.btn-login{width:100%;padding:11px;background:var(--text);color:#fff;border:none;border-radius:var(--radius);font-size:14px;font-family:inherit;font-weight:500;cursor:pointer;margin-top:.5rem;transition:.15s}
+.btn-login:hover{background:#333}
+.login-err{color:var(--danger);font-size:12px;text-align:center;margin-top:.75rem;min-height:18px}
+
+/* LAYOUT */
+#app{display:none;min-height:100vh}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:50}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.topbar h1{font-size:16px}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.user-chip{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text2)}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0}
+
+.nav{display:flex;gap:2px;padding:0 1rem;background:var(--surface);border-bottom:1px solid var(--border)}
+.nav-btn{padding:10px 14px;font-size:13px;font-family:inherit;border:none;background:none;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;transition:.15s}
+.nav-btn.active{color:var(--text);border-bottom-color:var(--accent);font-weight:500}
+
+.content{padding:1.25rem;max-width:900px;margin:0 auto}
+.page{display:none}.page.active{display:block}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem;box-shadow:var(--shadow)}
+.card-title{font-size:13px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:1rem;display:flex;align-items:center;gap:6px}
+.card-title::before{content:'';display:inline-block;width:3px;height:14px;background:var(--accent);border-radius:2px}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr}}
+
+.field{display:flex;flex-direction:column;gap:3px}
+.field label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.04em}
+.field input,.field select,.field textarea{padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;background:var(--surface2);color:var(--text);outline:none;transition:.15s;width:100%}
+.field input:focus,.field select:focus{border-color:var(--accent);background:#fff}
+.field input[readonly]{opacity:.55;cursor:default}
+.field textarea{resize:vertical;min-height:56px}
+.full{grid-column:1/-1}
+.section-sep{grid-column:1/-1;border:none;border-top:1px solid var(--border);margin:.25rem 0}
+
+/* BUTTONS */
+.btn{padding:8px 16px;border-radius:8px;font-size:13px;font-family:inherit;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);transition:.15s;display:inline-flex;align-items:center;gap:5px}
+.btn:hover{background:var(--surface2)}
+.btn-primary{background:var(--text);color:#fff;border-color:var(--text)}
+.btn-primary:hover{background:#333}
+.btn-gold{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-gold:hover{background:var(--accent-dark)}
+.btn-danger{color:var(--danger);border-color:transparent}
+.btn-danger:hover{background:#fdf2f2}
+.btn-sm{padding:5px 10px;font-size:12px}
+.btn-xs{padding:3px 7px;font-size:11px}
+
+/* FURNITURE */
+.fur-row{display:grid;grid-template-columns:1fr 60px 110px 30px;gap:6px;align-items:center;padding:4px 0;border-bottom:1px solid var(--border)}
+.fur-row:last-child{border-bottom:none}
+.fur-row input,.fur-row select{padding:5px 7px;border:1px solid var(--border);border-radius:6px;font-size:12px;font-family:inherit;background:var(--surface2);outline:none}
+.fur-row input:focus,.fur-row select:focus{border-color:var(--accent)}
+
+/* LIST */
+.contract-item{display:flex;align-items:center;gap:12px;padding:12px;border-bottom:1px solid var(--border);transition:.1s}
+.contract-item:last-child{border-bottom:none}
+.contract-item:hover{background:var(--surface2)}
+.ci-info{flex:1;min-width:0}
+.ci-main{font-weight:500;font-size:14px}
+.ci-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.ci-meta{font-size:11px;color:var(--text3);margin-top:1px}
+.badge{display:inline-block;padding:2px 7px;border-radius:20px;font-size:11px;font-weight:500}
+.badge-active{background:#d1fae5;color:#065f46}
+.badge-draft{background:#e0f2fe;color:#075985}
+.tag-role{background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:1rem}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;text-align:center}
+.stat-num{font-size:24px;font-weight:600;color:var(--text)}
+.stat-label{font-size:11px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.05em}
+
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--text);color:#fff;padding:10px 16px;border-radius:var(--radius);font-size:13px;z-index:999;transform:translateY(20px);opacity:0;transition:.25s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{background:var(--success)}
+.toast.error{background:var(--danger)}
+
+/* LOADING */
+.spinner{width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-overlay{display:none;position:fixed;inset:0;background:rgba(255,255,255,.7);z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:12px;font-size:14px;color:var(--text2)}
+.loading-overlay.show{display:flex}
+
+/* EMPTY */
+.empty{text-align:center;padding:3rem 1rem;color:var(--text3)}
+.empty svg{width:48px;height:48px;margin-bottom:1rem;opacity:.3}
+
+/* SEARCH */
+.search-bar{display:flex;gap:8px;margin-bottom:1rem}
+.search-bar input{flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;background:var(--surface);outline:none}
+.search-bar input:focus{border-color:var(--accent)}
+
+/* MODAL */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:center;justify-content:center;padding:1rem}
+.modal-backdrop.show{display:flex}
+.modal{background:var(--surface);border-radius:16px;padding:1.5rem;width:100%;max-width:440px;box-shadow:0 8px 40px rgba(0,0,0,.15)}
+.modal h3{font-size:16px;font-weight:500;margin-bottom:1rem}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:1.25rem}
+
+/* PRINT HIDE */
+@media print{.topbar,.nav,.btn,#tab-new,#tab-admin{display:none}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <h1>Hợp Đồng</h1>
+      <p>Quản lý thuê căn hộ · Vinhomes</p>
+    </div>
+    <div class="field"><label>Tên đăng nhập</label><input id="inp-user" placeholder="username" autocomplete="username"></div>
+    <div class="field"><label>Mã PIN</label><input id="inp-pin" type="password" placeholder="••••" autocomplete="current-password"></div>
+    <button class="btn-login" onclick="doLogin()">Đăng nhập</button>
+    <div class="login-err" id="login-err"></div>
+    <p style="font-size:11px;color:var(--text3);text-align:center;margin-top:1rem">Mặc định: admin / 1234</p>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loading">
+  <div class="spinner" style="width:28px;height:28px;border-width:3px"></div>
+  <span id="loading-msg">Đang xử lý...</span>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-left">
+      <h1>Hợp Đồng</h1>
+    </div>
+    <div class="topbar-right">
+      <div class="user-chip">
+        <div class="avatar" id="user-avatar">?</div>
+        <span id="user-name">...</span>
+        <span class="tag-role" id="user-role-tag" style="display:none">Admin</span>
+      </div>
+      <button class="btn btn-sm" onclick="doLogout()">Đăng xuất</button>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="nav-btn active" onclick="showTab('list', this)">📋 Danh sách</button>
+    <button class="nav-btn" onclick="showTab('new', this)">➕ Tạo hợp đồng</button>
+    <button class="nav-btn" id="admin-tab" onclick="showTab('admin', this)" style="display:none">⚙️ Quản trị</button>
+  </div>
+
+  <div class="content">
+
+    <!-- LIST TAB -->
+    <div class="page active" id="tab-list">
+      <div class="stats-grid" id="stats-area"></div>
+      <div class="card" style="padding:0">
+        <div style="padding:.75rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+          <span style="font-weight:500;font-size:13px">Danh sách hợp đồng</span>
+          <div class="search-bar" style="margin:0;width:200px">
+            <input id="search-inp" placeholder="Tìm kiếm..." oninput="renderList()">
+          </div>
+        </div>
+        <div id="list-area"></div>
+      </div>
+    </div>
+
+    <!-- NEW CONTRACT TAB -->
+    <div class="page" id="tab-new">
+      <div class="card">
+        <div class="card-title">Thông tin căn hộ</div>
+        <div class="grid2">
+          <div class="field"><label>Số hợp đồng</label><input id="f-hdso" placeholder="GH617.05/VHGP/HĐTN/2026"></div>
+          <div class="field"><label>Số căn hộ</label><input id="f-canho" placeholder="17.05"></div>
+          <div class="field"><label>Tầng</label><input id="f-tang" placeholder="17"></div>
+          <div class="field"><label>Tòa</label><input id="f-toa" placeholder="GH6"></div>
+          <div class="field"><label>Diện tích (m²)</label><input id="f-dt" type="number" placeholder="85"></div>
+          <div class="field"><label>Khu đô thị</label><input id="f-kdt" value="Vinhomes Grand Park, Long Bình, Hồ Chí Minh"></div>
+          <div class="field"><label>Ngày ký</label><input id="f-ngayky" type="date"></div>
+          <div class="field"><label>Mã hóa đơn điện PE</label><input id="f-madien" placeholder="Mã PE..."></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Bên A – Chủ cho thuê</div>
+        <div class="grid2">
+          <div class="field"><label>Họ tên</label><input id="A-ten"></div>
+          <div class="field"><label>CCCD số</label><input id="A-cccd"></div>
+          <div class="field"><label>Cấp ngày</label><input id="A-capngay" type="date"></div>
+          <div class="field"><label>Nơi cấp</label><input id="A-noicap" placeholder="Cục CS QLHC..."></div>
+          <div class="field full"><label>Hộ khẩu thường trú</label><input id="A-hokhau"></div>
+          <div class="field"><label>Số điện thoại</label><input id="A-sdt"></div>
+          <div class="field"><label>Số tài khoản</label><input id="A-stk"></div>
+          <div class="field"><label>Ngân hàng</label><input id="A-ngan"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Bên B – Người thuê</div>
+        <div class="grid2">
+          <div class="field"><label>Họ tên</label><input id="B-ten"></div>
+          <div class="field"><label>CCCD số</label><input id="B-cccd"></div>
+          <div class="field"><label>Cấp ngày</label><input id="B-capngay" type="date"></div>
+          <div class="field"><label>Nơi cấp</label><input id="B-noicap" placeholder="Cục CS QLHC..."></div>
+          <div class="field full"><label>Hộ khẩu thường trú</label><input id="B-hokhau"></div>
+          <div class="field"><label>Số điện thoại</label><input id="B-sdt"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Bên C – Môi giới</div>
+        <div class="grid2">
+          <div class="field"><label>Họ tên</label><input id="C-ten"></div>
+          <div class="field"><label>CCCD số</label><input id="C-cccd"></div>
+          <div class="field"><label>Cấp ngày</label><input id="C-capngay" type="date"></div>
+          <div class="field"><label>Số điện thoại</label><input id="C-sdt"></div>
+          <div class="field"><label>Số tài khoản</label><input id="C-stk"></div>
+          <div class="field"><label>Ngân hàng</label><input id="C-ngan"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Thời hạn & Tài chính</div>
+        <div class="grid2">
+          <div class="field"><label>Số tháng thuê</label><input id="f-sothang" type="number" value="12" oninput="tinhToan()"></div>
+          <div class="field"><label>Ngày bắt đầu</label><input id="f-batdau" type="date" oninput="tinhToan()"></div>
+          <div class="field"><label>Ngày kết thúc</label><input id="f-ketthuc" readonly></div>
+          <div class="field"><label>Giá thuê / tháng (VNĐ)</label><input id="f-giathue" type="number" placeholder="18000000" oninput="tinhToan()"></div>
+          <hr class="section-sep">
+          <div class="field"><label>Tiền cọc (= 2 tháng, tự tính)</label><input id="f-coc" readonly></div>
+          <div class="field"><label>Thù lao môi giới (= 1 tháng)</label><input id="f-thulaomg" readonly></div>
+          <div class="field"><label>Ngày đặt cọc lần 1 (giữ chỗ)</label><input id="f-coc1ngay" type="date"></div>
+          <div class="field"><label>Số tiền cọc lần 1 (VNĐ)</label><input id="f-coc1so" type="number" placeholder="5000000"></div>
+          <div class="field"><label>Ngày đặt cọc lần 2</label><input id="f-coc2ngay" type="date"></div>
+          <hr class="section-sep">
+          <div class="field"><label>Thanh toán từ ngày</label><input id="f-ttngay1" type="number" value="15" min="1" max="28"></div>
+          <div class="field"><label>Đến ngày</label><input id="f-ttngay2" type="number" value="20" min="1" max="28"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="justify-content:space-between">
+          <span>Nội thất bàn giao</span>
+          <button class="btn btn-sm" onclick="addFurniture()">+ Thêm</button>
+        </div>
+        <div id="fur-list"></div>
+      </div>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;padding-bottom:2rem">
+        <button class="btn btn-gold" onclick="saveAndDownload()">💾 Lưu & tải .docx</button>
+        <button class="btn btn-primary" onclick="saveDraft()">📌 Lưu nháp</button>
+        <button class="btn" onclick="clearForm()">🔄 Làm mới</button>
+      </div>
+    </div>
+
+    <!-- ADMIN TAB -->
+    <div class="page" id="tab-admin">
+      <div class="card">
+        <div class="card-title" style="justify-content:space-between">
+          <span>Quản lý người dùng</span>
+          <button class="btn btn-sm btn-primary" onclick="showAddUser()">+ Thêm nhân viên</button>
+        </div>
+        <div id="user-list-area"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ADD USER MODAL -->
+<div class="modal-backdrop" id="add-user-modal">
+  <div class="modal">
+    <h3>Thêm nhân viên</h3>
+    <div class="grid2" style="gap:10px">
+      <div class="field"><label>Tên đăng nhập</label><input id="nu-user" placeholder="vd: nguyen.van.a"></div>
+      <div class="field"><label>Mã PIN</label><input id="nu-pin" placeholder="1234" type="number"></div>
+      <div class="field full"><label>Họ tên</label><input id="nu-hoten" placeholder="Nguyễn Văn A"></div>
+      <div class="field"><label>Vai trò</label>
+        <select id="nu-role"><option value="user">Nhân viên</option><option value="admin">Admin</option></select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal()">Hủy</button>
+      <button class="btn btn-primary" onclick="doAddUser()">Thêm</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// CONFIG – Thay bằng URL Apps Script của bạn sau khi deploy
+// ============================================================
+const API_URL = 'https://script.google.com/macros/s/AKfycbyb1TrtGNw_vvzudLsmZeDlDfH3kz_6sRYhHX-0CeIH1VFWmhLPDIkCUZvZ4-D3wyYMVA/exec';
+
+// ============================================================
+let currentUser = null;
+let contracts = [];
+let furniture = [
+  {name:'Máy lạnh phòng khách',qty:'01',status:'Mới'},
+  {name:'Sofa',qty:'01 bộ',status:'Mới'},
+  {name:'Bàn ăn + 6 ghế',qty:'01 bộ',status:'Mới'},
+  {name:'Tủ bếp trên + dưới',qty:'01 bộ',status:'Mới'},
+  {name:'Tủ lạnh',qty:'01',status:'Mới'},
+  {name:'Lò vi sóng',qty:'01',status:'Mới'},
+  {name:'Giường master + nệm',qty:'01 bộ',status:'Mới'},
+  {name:'Tủ quần áo master',qty:'01 bộ',status:'Mới'},
+  {name:'Máy lạnh master',qty:'01',status:'Mới'},
+  {name:'Giường phòng ngủ 1 + nệm',qty:'01 bộ',status:'Mới'},
+  {name:'Tủ quần áo phòng ngủ 1',qty:'01 bộ',status:'Mới'},
+  {name:'Máy lạnh phòng ngủ 1',qty:'01',status:'Mới'},
+  {name:'Máy giặt',qty:'01',status:'Mới'},
+  {name:'Chìa khóa cửa chính',qty:'01',status:'Mới'},
+  {name:'Thẻ từ cư dân',qty:'03',status:'Mới'},
+];
+
+// ---- API ----
+async function api(params) {
+  const url = new URL(API_URL);
+  Object.entries(params).forEach(([k,v]) => url.searchParams.set(k, v));
+  const r = await fetch(url.toString());
+  return r.json();
+}
+
+// ---- AUTH ----
+async function doLogin() {
+  const u = document.getElementById('inp-user').value.trim();
+  const p = document.getElementById('inp-pin').value.trim();
+  if (!u||!p) return;
+  showLoading('Đang đăng nhập...');
+  try {
+    const res = await api({action:'login', username:u, pin:p});
+    if (res.ok) {
+      currentUser = {username:u, pin:p, role:res.role, hoten:res.hoten};
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      document.getElementById('user-name').textContent = res.hoten || u;
+      document.getElementById('user-avatar').textContent = (res.hoten||u).slice(0,2).toUpperCase();
+      if (res.role === 'admin') {
+        document.getElementById('admin-tab').style.display = 'inline-block';
+        document.getElementById('user-role-tag').style.display = 'inline-block';
+      }
+      await loadContracts();
+    } else {
+      document.getElementById('login-err').textContent = res.error || 'Sai thông tin';
+    }
+  } catch(e) {
+    document.getElementById('login-err').textContent = 'Lỗi kết nối. Kiểm tra lại cấu hình API.';
+  }
+  hideLoading();
+}
+
+document.getElementById('inp-pin').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+function doLogout() {
+  currentUser = null;
+  contracts = [];
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-err').textContent = '';
+}
+
+// ---- TABS ----
+function showTab(name, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (name === 'list') renderList();
+  if (name === 'admin') loadUsers();
+}
+
+// ---- CONTRACTS ----
+async function loadContracts() {
+  showLoading('Đang tải dữ liệu...');
+  try {
+    const res = await api({action:'getContracts', username:currentUser.username, pin:currentUser.pin});
+    if (res.ok) {
+      contracts = res.data || [];
+      renderList();
+      renderStats();
+    }
+  } catch(e) {}
+  hideLoading();
+}
+
+function renderStats() {
+  const total = contracts.length;
+  const active = contracts.filter(c=>c.status==='active').length;
+  const revenue = contracts.filter(c=>c.status==='active').reduce((s,c)=>s+(parseInt(c.gia_thue)||0),0);
+  document.getElementById('stats-area').innerHTML = `
+    <div class="stat-card"><div class="stat-num">${total}</div><div class="stat-label">Tổng HĐ</div></div>
+    <div class="stat-card"><div class="stat-num">${active}</div><div class="stat-label">Đang thuê</div></div>
+    <div class="stat-card"><div class="stat-num">${(revenue/1e6).toFixed(0)}M</div><div class="stat-label">Doanh thu/tháng</div></div>
+  `;
+}
+
+function renderList() {
+  const q = (document.getElementById('search-inp')?.value||'').toLowerCase();
+  const el = document.getElementById('list-area');
+  const filtered = contracts.filter(c =>
+    !q || [c.can_ho,c.toa,c.B_ten,c.A_ten,c.so_hd].some(v=>(v||'').toLowerCase().includes(q))
+  );
+  if (!filtered.length) {
+    el.innerHTML = `<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><p>Chưa có hợp đồng nào</p></div>`;
+    return;
+  }
+  el.innerHTML = filtered.map(c => `
+    <div class="contract-item">
+      <div class="avatar" style="background:#f0e9d6;color:#a8893e;font-size:11px">${(c.toa||'??').slice(-2)}</div>
+      <div class="ci-info">
+        <div class="ci-main">Căn ${c.can_ho||'?'} · Tòa ${c.toa||'?'}</div>
+        <div class="ci-sub">Thuê: <b>${c.B_ten||'?'}</b> · ${parseInt(c.gia_thue||0).toLocaleString('vi-VN')} VNĐ/tháng</div>
+        <div class="ci-meta">${c.bat_dau||''} → ${c.ket_thuc||''} · ${c.so_hd||''}</div>
+      </div>
+      <span class="badge ${c.status==='active'?'badge-active':'badge-draft'}">${c.status==='active'?'Đang thuê':'Nháp'}</span>
+      <button class="btn btn-xs" onclick="redownload(${JSON.stringify(c).replace(/"/g,'&quot;')})">📄</button>
+      <button class="btn btn-xs btn-danger" onclick="deleteC('${c.id}')">🗑</button>
+    </div>
+  `).join('');
+}
+
+async function deleteC(id) {
+  if (!confirm('Xóa hợp đồng này?')) return;
+  showLoading('Đang xóa...');
+  await api({action:'deleteContract', username:currentUser.username, pin:currentUser.pin, id});
+  await loadContracts();
+  hideLoading();
+  toast('Đã xóa', 'success');
+}
+
+// ---- FORM ----
+function tinhToan() {
+  const months = parseInt(document.getElementById('f-sothang').value)||12;
+  const startStr = document.getElementById('f-batdau').value;
+  const rent = parseInt(document.getElementById('f-giathue').value)||0;
+  if (startStr) {
+    const end = new Date(startStr);
+    end.setMonth(end.getMonth()+months);
+    end.setDate(end.getDate()-1);
+    document.getElementById('f-ketthuc').value = end.toISOString().split('T')[0];
+    if (!document.getElementById('f-coc2ngay').value)
+      document.getElementById('f-coc2ngay').value = startStr;
+  }
+  if (rent > 0) {
+    document.getElementById('f-coc').value = (rent*2).toLocaleString('vi-VN') + ' VNĐ';
+    document.getElementById('f-thulaomg').value = rent.toLocaleString('vi-VN') + ' VNĐ';
+  }
+}
+
+function g(id) { return document.getElementById(id)?.value||''; }
+
+function getFormData(status='active') {
+  const rent = parseInt(g('f-giathue'))||0;
+  return {
+    so_hd:g('f-hdso'), can_ho:g('f-canho'), toa:g('f-toa'), tang:g('f-tang'),
+    dt:g('f-dt'), kdt:g('f-kdt'), ngay_ky:g('f-ngayky'), ma_dien:g('f-madien'),
+    A:{ten:g('A-ten'),cccd:g('A-cccd'),capngay:g('A-capngay'),noicap:g('A-noicap'),hokhau:g('A-hokhau'),sdt:g('A-sdt'),stk:g('A-stk'),ngan:g('A-ngan')},
+    B:{ten:g('B-ten'),cccd:g('B-cccd'),capngay:g('B-capngay'),noicap:g('B-noicap'),hokhau:g('B-hokhau'),sdt:g('B-sdt')},
+    C:{ten:g('C-ten'),cccd:g('C-cccd'),capngay:g('C-capngay'),sdt:g('C-sdt'),stk:g('C-stk'),ngan:g('C-ngan')},
+    so_thang:g('f-sothang'), bat_dau:g('f-batdau'), ket_thuc:g('f-ketthuc'),
+    gia_thue:rent, tien_coc:rent*2, thulao_mg:rent,
+    coc1_ngay:g('f-coc1ngay'), coc1_so:parseInt(g('f-coc1so'))||0,
+    coc2_ngay:g('f-coc2ngay'), tt_ngay1:g('f-ttngay1'), tt_ngay2:g('f-ttngay2'),
+    furniture:[...furniture], status
+  };
+}
+
+async function saveAndDownload() {
+  const data = getFormData('active');
+  if (!data.can_ho) { toast('Vui lòng nhập số căn hộ', 'error'); return; }
+  showLoading('Đang lưu...');
+  const res = await api({action:'saveContract', username:currentUser.username, pin:currentUser.pin, data:JSON.stringify(data)});
+  hideLoading();
+  if (res.ok) {
+    toast('Đã lưu! Đang tạo file...', 'success');
+    generateDocx(data);
+  } else {
+    toast(res.error||'Lỗi lưu', 'error');
+  }
+}
+
+async function saveDraft() {
+  const data = getFormData('draft');
+  showLoading('Đang lưu nháp...');
+  await api({action:'saveContract', username:currentUser.username, pin:currentUser.pin, data:JSON.stringify(data)});
+  hideLoading();
+  toast('Đã lưu nháp', 'success');
+}
+
+function clearForm() {
+  document.querySelectorAll('#tab-new input:not([readonly]), #tab-new select').forEach(el=>el.value='');
+  document.getElementById('f-kdt').value = 'Vinhomes Grand Park, Long Bình, Hồ Chí Minh';
+  furniture = [{name:'Máy lạnh',qty:'01',status:'Mới'}];
+  renderFurniture();
+}
+
+// ---- FURNITURE ----
+function renderFurniture() {
+  const el = document.getElementById('fur-list');
+  el.innerHTML = furniture.length ? furniture.map((f,i)=>`
+    <div class="fur-row">
+      <input value="${f.name}" placeholder="Tên thiết bị" oninput="furniture[${i}].name=this.value">
+      <input value="${f.qty}" placeholder="SL" oninput="furniture[${i}].qty=this.value" style="text-align:center">
+      <select oninput="furniture[${i}].status=this.value">
+        <option ${f.status==='Mới'?'selected':''}>Mới</option>
+        <option ${f.status==='Cũ còn tốt'?'selected':''}>Cũ còn tốt</option>
+        <option ${f.status==='Cần sửa'?'selected':''}>Cần sửa</option>
+      </select>
+      <button onclick="furniture.splice(${i},1);renderFurniture()" style="background:none;border:none;cursor:pointer;color:var(--danger);font-size:14px">✕</button>
+    </div>`).join('') : '<p style="color:var(--text3);font-size:13px;padding:.5rem 0">Chưa có thiết bị nào</p>';
+}
+
+function addFurniture() {
+  furniture.push({name:'',qty:'01',status:'Mới'});
+  renderFurniture();
+}
+
+// ---- DOCX GENERATION ----
+function numToWords(n) {
+  const units=['không','một','hai','ba','bốn','năm','sáu','bảy','tám','chín'];
+  const tens=['','mười','hai mươi','ba mươi','bốn mươi','năm mươi','sáu mươi','bảy mươi','tám mươi','chín mươi'];
+  if(n===0) return 'không';
+  if(n<10) return units[n];
+  if(n<100) return tens[Math.floor(n/10)]+(n%10?' '+units[n%10]:'');
+  if(n<1000) return units[Math.floor(n/100)]+' trăm'+(n%100?' '+numToWords(n%100):'');
+  if(n<1e6) return numToWords(Math.floor(n/1000))+' nghìn'+(n%1000?' '+numToWords(n%1000):'');
+  if(n<1e9) return numToWords(Math.floor(n/1e6))+' triệu'+(n%1e6?' '+numToWords(n%1e6):'');
+  return n.toString();
+}
+
+function cap(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : ''; }
+
+function formatDate(str) {
+  if(!str) return '...';
+  const [y,m,d] = str.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+function redownload(c) {
+  const data = {
+    so_hd:c.so_hd, can_ho:c.can_ho, toa:c.toa, tang:c.tang, dt:c.dt, kdt:c.kdt,
+    ngay_ky:c.ngay_ky, ma_dien:c.ma_dien,
+    A:{ten:c.A_ten,cccd:c.A_cccd,capngay:c.A_capngay,noicap:c.A_noicap,hokhau:c.A_hokhau,sdt:c.A_sdt,stk:c.A_stk,ngan:c.A_ngan},
+    B:{ten:c.B_ten,cccd:c.B_cccd,capngay:c.B_capngay,noicap:c.B_noicap,hokhau:c.B_hokhau,sdt:c.B_sdt},
+    C:{ten:c.C_ten,cccd:c.C_cccd,capngay:c.C_capngay,sdt:c.C_sdt,stk:c.C_stk,ngan:c.C_ngan},
+    so_thang:c.so_thang, bat_dau:c.bat_dau, ket_thuc:c.ket_thuc,
+    gia_thue:parseInt(c.gia_thue)||0, tien_coc:parseInt(c.tien_coc)||0, thulao_mg:parseInt(c.thulao_mg)||0,
+    coc1_ngay:c.coc1_ngay, coc1_so:parseInt(c.coc1_so)||0, coc2_ngay:c.coc2_ngay,
+    tt_ngay1:c.tt_ngay1, tt_ngay2:c.tt_ngay2,
+    furniture: typeof c.furniture==='string' ? JSON.parse(c.furniture||'[]') : (c.furniture||[])
+  };
+  generateDocx(data);
+}
+
+function generateDocx(d) {
+  const {Document,Packer,Paragraph,TextRun,Table,TableRow,TableCell,AlignmentType,WidthType,BorderStyle,ShadingType,HeadingLevel} = docx;
+
+  const rent = d.gia_thue||0;
+  const coc = d.tien_coc||rent*2;
+  const mg = d.thulao_mg||rent;
+  const boiduong = coc*2;
+  const coc2so = coc - (d.coc1_so||0);
+
+  function p(text, opts={}) {
+    return new Paragraph({
+      alignment: opts.center ? AlignmentType.CENTER : opts.right ? AlignmentType.RIGHT : AlignmentType.LEFT,
+      spacing:{after: opts.noSpace ? 0 : 100},
+      children:[new TextRun({
+        text, bold:opts.bold, italics:opts.italic,
+        size: opts.size||24, font:'Times New Roman',
+        color: opts.color||undefined
+      })]
+    });
+  }
+
+  function runs(parts) {
+    return new Paragraph({spacing:{after:100}, children: parts.map(pt =>
+      new TextRun({text:pt.text, bold:pt.bold, italics:pt.italic, size:pt.size||24, font:'Times New Roman'})
+    )});
+  }
+
+  function blank() { return p(''); }
+
+  function tableRow(cells, header=false) {
+    return new TableRow({children: cells.map((cell,ci) =>
+      new TableCell({
+        width:{size: ci===0?500:ci===1?4500:ci===2?2000:2000, type:WidthType.DXA},
+        shading: header ? {fill:'D9D9D9', type:ShadingType.CLEAR} : undefined,
+        margins:{top:80,bottom:80,left:100,right:100},
+        children:[new Paragraph({children:[new TextRun({text:String(cell||''), bold:header, size:22, font:'Times New Roman'})]})]
+      })
+    )});
+  }
+
+  const furTable = new Table({
+    width:{size:9000,type:WidthType.DXA},
+    columnWidths:[500,4500,2000,2000],
+    rows:[
+      tableRow(['STT','Tên thiết bị','Số lượng','Tình trạng'], true),
+      ...((d.furniture||[]).map((f,i) => tableRow([i+1, f.name, f.qty, f.status])))
+    ]
+  });
+
+  const sigTable = new Table({
+    width:{size:9000,type:WidthType.DXA},
+    columnWidths:[3000,3000,3000],
+    rows:[
+      new TableRow({children:[
+        ['BÊN CHO THUÊ (BÊN A)','BÊN THUÊ (BÊN B)','BÊN MÔI GIỚI (BÊN C)'].map(t=>
+          new TableCell({margins:{top:80,bottom:80,left:100,right:100},
+            children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:t,bold:true,size:22,font:'Times New Roman'})]})]})
+        )
+      ]}),
+      new TableRow({children: Array(3).fill(null).map(()=>
+        new TableCell({margins:{top:80,bottom:500,left:100,right:100},children:[p('')]})
+      )}),
+      new TableRow({children:[
+        [d.A?.ten||'', d.B?.ten||'', d.C?.ten||''].map(name=>
+          new TableCell({margins:{top:40,bottom:80,left:100,right:100},
+            children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:name,bold:true,size:22,font:'Times New Roman'})]})]})
+        )
+      ]})
+    ]
+  });
+
+  const children = [
+    p('CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM', {bold:true, center:true}),
+    p('Độc lập - Tự do - Hạnh phúc', {italic:true, center:true}),
+    p('───────────────────', {center:true}),
+    blank(),
+    p('HỢP ĐỒNG CHO THUÊ CĂN HỘ', {bold:true, center:true, size:28}),
+    p(`Căn hộ số ${d.can_ho||'...'} Vinhomes Grand Park, Phường Long Bình, TP Thủ Đức, Hồ Chí Minh.`, {italic:true, center:true}),
+    blank(),
+    p(`GIỮA`, {bold:true, center:true}),
+    p(`BÊN CHO THUÊ: ${d.A?.ten||''}`, {bold:true, center:true}),
+    p(`BÊN THUÊ: ${d.B?.ten||''}`, {bold:true, center:true}),
+    blank(),
+    p(`TP Hồ Chí Minh, Ngày ${formatDate(d.ngay_ky)}`),
+    blank(),
+    p('HỢP ĐỒNG CHO THUÊ CĂN HỘ', {bold:true, center:true, size:26}),
+    p(`(Số: ${d.so_hd||'...'})`, {italic:true, center:true}),
+    blank(),
+    p('Căn cứ vào:', {italic:true}),
+    p('- Bộ luật Dân sự số 91/2015/QH13 của Quốc hội nước CHXHCN Việt Nam ban hành ngày 24/11/2015;', {italic:true}),
+    p('- Luật Nhà Ở số 56/2005/QH11 của Quốc hội nước CHXHCN Việt Nam ban hành ngày 29/11/2005;', {italic:true}),
+    p('- Luật Kinh doanh Bất động sản số 66/2014/QH13 của Quốc hội nước CHXHCN Việt Nam ngày 25/11/2014;', {italic:true}),
+    p('- Căn cứ vào nhu cầu và khả năng thực tế của các Bên.', {italic:true}),
+    blank(),
+    runs([{text:`Hôm nay, ngày ${formatDate(d.ngay_ky)}, `},{text:'CHÚNG TÔI GỒM',bold:true},{text:' các Bên sau đây:'}]),
+    blank(),
+    p('BÊN CHO THUÊ (Bên A):', {bold:true}),
+    p(`\t\tÔng (Bà): ${d.A?.ten||''}`),
+    p(`\t\tCMND/CCCD số: ${d.A?.cccd||''}\t\tcấp ngày: ${formatDate(d.A?.capngay)}`),
+    p(`\t\tTại: ${d.A?.noicap||''}`),
+    p(`\t\tHộ khẩu thường trú: ${d.A?.hokhau||''}`),
+    p(`\t\tSố điện thoại: ${d.A?.sdt||''}`),
+    runs([{text:'Là chủ sở hữu hoàn toàn và hợp pháp của căn hộ: ',italic:true},{text:`${d.can_ho||''}`,bold:true,italic:true},{text:`, tầng `,italic:true},{text:`${d.tang||''}`,bold:true,italic:true},{text:`, tòa `,italic:true},{text:`${d.toa||''}`,bold:true,italic:true},{text:`, Khu đô thị ${d.kdt||''}.`,italic:true}]),
+    blank(),
+    p('BÊN THUÊ (Bên B):', {bold:true}),
+    p(`\t\tÔng (Bà): ${d.B?.ten||''}`),
+    p(`\t\tCMND/CCCD số: ${d.B?.cccd||''}\t\tCấp ngày: ${formatDate(d.B?.capngay)}`),
+    p(`\t\tTại: ${d.B?.noicap||''}`),
+    p(`\t\tHộ khẩu thường trú: ${d.B?.hokhau||''}`),
+    p(`\t\tSố điện thoại: ${d.B?.sdt||''}`),
+    blank(),
+    p('BÊN LÀM CHỨNG – MÔI GIỚI (Bên C):', {bold:true}),
+    p(`\t\tÔng (Bà): ${d.C?.ten||''}`),
+    p(`\t\tCMND/CCCD số: ${d.C?.cccd||''}\t\tCấp ngày: ${formatDate(d.C?.capngay)}`),
+    p(`\t\tSố điện thoại: ${d.C?.sdt||''}`),
+    p(`\t\tSố tài khoản: ${d.C?.stk||''} - ${d.C?.ngan||''}`),
+    blank(),
+    p('Sau khi thỏa thuận, thống nhất, hai Bên đồng ý ký kết Hợp đồng cho thuê căn hộ này với các điều khoản và nội dung sau:'),
+    blank(),
+    runs([{text:'Điều 1:',bold:true},{text:' Mục đích thuê và đặc điểm của căn hộ:',bold:true}]),
+    p('1.1. Bên A cho Bên B thuê căn hộ vào mục đích: Để ở và làm tạm trú.'),
+    p('1.2. Đặc điểm căn hộ:'),
+    p(`\t- Diện tích: ${d.dt||'...'} m²`),
+    p(`\t- Địa chỉ: Căn hộ số ${d.can_ho||''} tầng ${d.tang||''}, tòa ${d.toa||''} Khu đô thị ${d.kdt||''}.`),
+    p('\t- Nội thất: Theo danh sách nội thất kèm theo (phụ lục cuối hợp đồng)'),
+    blank(),
+    runs([{text:'Điều 2:',bold:true},{text:' Thời hạn thuê và giá thuê:',bold:true}]),
+    runs([{text:'2.1. '},{text:`Thời gian thuê: ${d.so_thang||12} tháng, tính từ ngày `},{text:`${formatDate(d.bat_dau)}`,bold:true},{text:' đến hết ngày '},{text:`${formatDate(d.ket_thuc)}`,bold:true}]),
+    p('Bên B được ưu tiên tiếp tục thuê căn hộ trong những tháng tiếp theo nếu Bên B báo trước 01 tháng trước khi kết thúc hợp đồng trong trường hợp bên A tiếp tục cho thuê tiếp.'),
+    runs([{text:'2.2. '},{text:`Giá thuê: `},{text:`${rent.toLocaleString('vi-VN')} VNĐ/ tháng`,bold:true},{text:` (Bằng chữ: ${cap(numToWords(rent))} đồng.)`,italic:true}]),
+    p('Giá thuê này cố định trong suốt thời gian thuê nhà.'),
+    p('2.3. Giá thuê trên không bao gồm các chi phí sử dụng cơ sở hạ tầng như: điện, nước, gas, điện thoại, internet, truyền hình cáp,…. Phí dịch vụ tòa nhà và tất cả các dịch vụ khác trong tòa nhà do Bên B sử dụng và tự thanh toán trực tiếp với dịch vụ cung cấp đúng thời gian quy định của chung cư theo khối lượng tiêu thụ hàng tháng.'),
+    blank(),
+    runs([{text:'Điều 3:',bold:true},{text:' Đặt cọc và phương thức thanh toán',bold:true}]),
+    runs([{text:'3.1. Đặt cọc: ',bold:true}]),
+    runs([{text:`Bên B đặt cọc cho Bên A một khoản tiền là `},{text:`${coc.toLocaleString('vi-VN')} VNĐ`,bold:true},{text:` (Bằng chữ: ${cap(numToWords(coc))} đồng.)`,italic:true},{text:' để đảm bảo Bên B sẽ thực hiện các điều khoản nêu trong Hợp đồng. Số tiền trên được chia làm 2 đợt:'}]),
+    runs([{text:`+ Ngày ${formatDate(d.coc1_ngay)}: Bên B chuyển khoản cho bên A `},{text:`${(d.coc1_so||0).toLocaleString('vi-VN')} VNĐ`,bold:true},{text:' để giữ chỗ căn hộ.'}]),
+    runs([{text:`+ Ngày ${formatDate(d.coc2_ngay)}: Bên B thanh toán số tiền cọc còn lại `},{text:`${coc2so.toLocaleString('vi-VN')} VNĐ`,bold:true},{text:' cho bên A.'}]),
+    p('Bên A sẽ trả lại cho Bên B số tiền đặt cọc trong vòng 05 ngày sau khi Hợp đồng thuê nhà kết thúc.'),
+    runs([{text:'3.2. Hình thức thanh toán:',bold:true},{text:' Chuyển khoản hoặc tiền mặt.'}]),
+    runs([{text:'Thông tin tài khoản: ',bold:true},{text:`${d.A?.ten||''} – Số TK: ${d.A?.stk||''} – ${d.A?.ngan||''}`,bold:true}]),
+    runs([{text:'3.3. Thanh toán:',bold:true},{text:` Bên B thanh toán cho Bên A `},{text:`${rent.toLocaleString('vi-VN')} VNĐ`,bold:true},{text:` – tương đương 1 tháng đầu tiên từ ngày ${formatDate(d.bat_dau)}.`}]),
+    runs([{text:'3.4. '},{text:`Các lần thanh toán tiếp theo định kỳ 01 tháng/lần, vào ngày `},{text:`${d.tt_ngay1||15} đến ngày ${d.tt_ngay2||20}`,bold:true},{text:' hàng tháng.'}]),
+    blank(),
+    runs([{text:'Điều 4:',bold:true},{text:' Quyền và trách nhiệm của Bên A',bold:true}]),
+    p('4.1. Bàn giao căn hộ và các trang thiết bị nội thất cho Bên B theo Danh sách trang thiết bị kèm theo.'),
+    p('4.2. Đảm bảo quyền cho thuê hợp pháp, căn hộ cho thuê hiện không có tranh chấp.'),
+    p('4.3. Bàn giao quyền sử dụng công tơ điện nước của căn hộ cho Bên B.'),
+    p('4.4. Sửa chữa kịp thời tất cả những hư hỏng về cơ sở hạ tầng, trang thiết bị không do lỗi của Bên B.'),
+    p('4.5. Được ghé thăm và kiểm tra căn hộ, có hẹn báo trước với bên thuê.'),
+    p('4.6. Giúp đỡ bên B thực hiện các quy định về tạm trú.'),
+    blank(),
+    runs([{text:'Điều 5:',bold:true},{text:' Quyền và trách nhiệm của Bên B',bold:true}]),
+    p('5.1. Trả tiền thuê nhà đúng hạn.'),
+    p('5.2. Sử dụng căn hộ đúng mục đích. Không được tự ý sửa chữa khi chưa được sự đồng ý bằng văn bản của Bên A.'),
+    p('5.3. Chịu trách nhiệm về đồ đạc cá nhân.'),
+    p('5.4. Thực hiện nghiêm chỉnh các quy định về giữ gìn vệ sinh môi trường, trật tự an ninh, phòng cháy chữa cháy.'),
+    p('5.5. Không sử dụng nhà cho thuê vào bất cứ mục đích nào vi phạm pháp luật Việt Nam.'),
+    p('5.6. Trực tiếp thanh toán tiền điện, nước, dịch vụ đúng hạn theo quy định của BQL tòa nhà.'),
+    p('5.7. Có trách nhiệm bảo quản tài sản theo bản liệt kê như khi bàn giao, nếu có hư hỏng thì bồi thường cho Bên A.'),
+    p('5.8. Khi hợp đồng kết thúc, bàn giao lại nguyên trạng căn hộ cho bên A (chấp nhận hao mòn tự nhiên).'),
+    blank(),
+    runs([{text:'Điều 6:',bold:true},{text:' Quyền và trách nhiệm của Bên C',bold:true}]),
+    runs([{text:'6.1. '},{text:`Được nhận thù lao `},{text:`${mg.toLocaleString('vi-VN')} VNĐ`,bold:true},{text:` (Bằng chữ: ${cap(numToWords(mg))} đồng)`,italic:true},{text:' ngay sau khi hợp đồng được ký kết.'}]),
+    p('6.2. Hỗ trợ thủ tục xem nhà, soạn hợp đồng thuê nhà theo đúng quy định của pháp luật hiện hành.'),
+    p('6.3. Hỗ trợ bên B làm các thủ tục tạm trú, thẻ cư dân, gửi xe, lắp mạng.'),
+    p('6.4. Khi hợp đồng kết thúc, nếu bên B gia hạn trên 06 tháng, bên C được nhận thêm 50% thù lao ban đầu.'),
+    p('6.5. Cùng các bên giải quyết các vấn đề phát sinh, tranh chấp trong suốt thời gian hiệu lực hợp đồng.'),
+    blank(),
+    runs([{text:'Điều 7:',bold:true},{text:' Chấm dứt hợp đồng',bold:true}]),
+    p('7.1. Hợp đồng chấm dứt không phải bồi thường khi: hết thời hạn; căn hộ bị phá dỡ; xảy ra sự kiện bất khả kháng.'),
+    runs([{text:'7.2. '},{text:`Nếu Bên A chấm dứt trước hạn: báo trước 30 ngày và hoàn trả tổng `},{text:`${boiduong.toLocaleString('vi-VN')} VNĐ`,bold:true},{text:` (tiền cọc + bồi thường bằng tiền cọc).`}]),
+    p('7.3. Nếu Bên B chấm dứt trước hạn: báo trước 30 ngày, thanh toán hết các khoản phát sinh và không được nhận lại tiền cọc.'),
+    blank(),
+    runs([{text:'Điều 8:',bold:true},{text:' Hai bên cam kết:',bold:true}]),
+    p('8.1. Tuân thủ đầy đủ các điều khoản nêu trên.'),
+    p('8.2. Tất cả những vấn đề không được quy định tại Hợp đồng này sẽ được điều chỉnh theo quy định của pháp luật hiện hành.'),
+    p('8.3. Trường hợp xảy ra tranh chấp, hai Bên cùng thương lượng. Nếu không thương lượng được thì đưa ra Tòa án có thẩm quyền.'),
+    p('8.4. Nội dung hợp đồng này đã được hai Bên đọc và hiểu rõ.'),
+    blank(),
+    p('Hợp đồng được lập thành 04 bản tiếng Việt có cùng nội dung và giá trị pháp lý.'),
+    p('Hợp đồng có hiệu lực kể từ ngày hai Bên ký kết!'),
+    blank(), blank(),
+    sigTable,
+    blank(), blank(),
+    p('PHỤ LỤC BÀN GIAO NỘI THẤT', {bold:true, center:true}),
+    blank(),
+    furTable,
+    blank(),
+    runs([{text:`MÃ HÓA ĐƠN ĐIỆN PE (THANH TOÁN ĐIỆN): `,bold:true},{text:`${d.ma_dien||'..............'}`,bold:true}]),
+    p('Khách thuê tự thanh toán hóa đơn điện trước ngày 10 hàng tháng. Hotline: 1900545454 nhánh 0.'),
+    p('Hóa đơn nước, dịch vụ, gửi xe,… khách thuê tự thanh toán cho BQL Vinhomes trước ngày 13 hàng tháng qua App Vinhomes Resident.'),
+    blank(), blank(),
+    sigTable,
+  ];
+
+  const doc = new Document({
+    sections:[{
+      properties:{page:{size:{width:11906,height:16838},margin:{top:1134,bottom:1134,left:1701,right:1134}}},
+      children
+    }]
+  });
+
+  Packer.toBlob(doc).then(blob => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `HopDong_${d.can_ho||'can'}_${d.B?.ten||'khach'}.docx`.replace(/\s+/g,'_');
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('Tải file thành công!', 'success');
+  });
+}
+
+// ---- ADMIN ----
+async function loadUsers() {
+  const res = await api({action:'getUsers', username:currentUser.username, pin:currentUser.pin});
+  const el = document.getElementById('user-list-area');
+  if (!res.ok) { el.innerHTML = '<p style="color:var(--danger)">'+res.error+'</p>'; return; }
+  el.innerHTML = res.data.map(u=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:10px;border-bottom:1px solid var(--border)">
+      <div class="avatar" style="background:#f0e9d6;color:#a8893e">${(u.hoten||u.username).slice(0,2).toUpperCase()}</div>
+      <div style="flex:1">
+        <div style="font-weight:500">${u.hoten||u.username}</div>
+        <div style="font-size:12px;color:var(--text2)">@${u.username} · ${u.created||''}</div>
+      </div>
+      <span class="badge ${u.role==='admin'?'badge-active':'badge-draft'}">${u.role==='admin'?'Admin':'Nhân viên'}</span>
+    </div>
+  `).join('');
+}
+
+function showAddUser() { document.getElementById('add-user-modal').classList.add('show'); }
+function closeModal() { document.getElementById('add-user-modal').classList.remove('show'); }
+
+async function doAddUser() {
+  const newUser = document.getElementById('nu-user').value.trim();
+  const newPin = document.getElementById('nu-pin').value.trim();
+  const role = document.getElementById('nu-role').value;
+  document.getElementById('nu-hoten').value; // just access
+  if (!newUser||!newPin) { toast('Nhập đủ thông tin','error'); return; }
+  showLoading('Đang thêm...');
+  await api({action:'addUser', username:currentUser.username, pin:currentUser.pin, newUser, newPin, role});
+  hideLoading();
+  closeModal();
+  toast('Đã thêm nhân viên','success');
+  loadUsers();
+}
+
+// ---- UI HELPERS ----
+function showLoading(msg='Đang xử lý...') {
+  document.getElementById('loading-msg').textContent = msg;
+  document.getElementById('loading').classList.add('show');
+}
+function hideLoading() { document.getElementById('loading').classList.remove('show'); }
+
+function toast(msg, type='') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show'+(type?' '+type:'');
+  setTimeout(()=>el.classList.remove('show'), 2800);
+}
+
+// ---- INIT ----
+renderFurniture();
+document.getElementById('f-batdau').valueAsDate = new Date();
+tinhToan();
+document.getElementById('f-ngayky').valueAsDate = new Date();
+</script>
+</body>
+</html>
